@@ -1,0 +1,20 @@
+{
+  "name": "Geek-Cosmetics",
+  "version": "1.0.0",
+  "description": "A system to sell items, generate a little report and storage in database",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JuanEstebanCC/Geek-Cosmetics.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JuanEstebanCC/Geek-Cosmetics/issues"
+  },
+  "homepage": "https://github.com/JuanEstebanCC/Geek-Cosmetics#readme"
+}
