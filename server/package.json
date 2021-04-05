@@ -4,7 +4,9 @@
   "description": "A system to sell items, generate a little report and storage in database",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo",
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +18,20 @@
   "bugs": {
     "url": "https://github.com/JuanEstebanCC/Geek-Cosmetics/issues"
   },
-  "homepage": "https://github.com/JuanEstebanCC/Geek-Cosmetics#readme"
+  "homepage": "https://github.com/JuanEstebanCC/Geek-Cosmetics#readme",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.5.0",
+    "nodemailer-smtp-transport": "^2.7.4"
+  },
+  "devDependencies": {
+    "dateformat": "^4.5.1",
+    "faker": "^5.5.2",
+    "nodemon": "^2.0.7"
+  }
 }
