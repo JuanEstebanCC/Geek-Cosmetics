@@ -29,7 +29,7 @@ const Home = () => {
               </button>
               <button class="fancy">
                 <span class="top-key"></span>
-                <a href="/cosmetics/new">See orders</a>
+                <a href="/cosmetics">See orders</a>
                 <span class="bottom-key-1"></span>
                 <span class="bottom-key-2"></span>
               </button>
