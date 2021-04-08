@@ -5,12 +5,27 @@ import * as Yup from "yup";
 
 import dataes from "../helpers/info_prueba.json";
 
-const NewCosmetics = () => {
+const NewCosmetics = (props) => {
+  const { history } = props;
+  const [products, setProducts] = useState("");
   const [item, setItem] = useState("");
   const [quantity, setQuantity] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
-  const [currentOrder, setCurrentOrder] = useState([{}]);
-  const objecto = Object.values(dataes);
+  const [allSubtotal, setAllSubtotal] = useState(0);
+  //const [total, setTotal] = useState(0);
+  const iva = allSubtotal * 0.19;
+  const total = allSubtotal + iva;
+  const [orderNumber, setOrderNumber] = useState(0);
+  const [currentOrder, setCurrentOrder] = useState([
+    {
+      client_name: "",
+      item: "",
+      quantity: 0,
+      subtotal: 0,
+      total: 0,
+      date: "",
+    },
+  ]);
   const getCurrentDate = () => {
     const dayjs = require("dayjs");
     let today = dayjs();
@@ -19,6 +34,31 @@ const NewCosmetics = () => {
     return currentDate;
   };
   let currentDate = getCurrentDate();
+  //useEffect(async () => {
+  //const response = await fetch("http://localhost:4300/items");
+
+  //const user = await response.json;
+
+  //console.log(user);
+  //}, []);
+
+  useEffect(() => {
+    (async () => {
+      await fetch("/items", {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setProducts(data);
+        });
+    })();
+  }, []);
+
+  const objecto = Object.values(products);
 
   useEffect(() => {
     objecto.map((el) => {
@@ -29,42 +69,96 @@ const NewCosmetics = () => {
     });
   });
 
-  let orders = [...currentOrder];
-  //console.log(calculateSubtotal());
   const handleSubmit = (values) => {
-    console.log(values.client_name);
-    console.info(item);
-    console.log(currentDate);
-    console.log(currentOrder);
-
-    console.log(currentOrder.length);
     const newOrder = [
       {
         client_name: values.client_name,
         item: item,
         quantity: quantity,
         subtotal: subtotal,
+        total: subtotal,
         date: currentDate,
       },
     ];
-    orders = [...currentOrder, ...newOrder];
-    console.log(orders, "THE ORDERS");
-    for (let i = 0; i <= currentOrder.length; i++) {}
+
     setCurrentOrder([...currentOrder, ...newOrder]);
+    const orders = [...currentOrder, ...newOrder];
     console.log(currentOrder);
+
+    //for (let i = 0; i < orders.length; i++) {
+    //if (orders[i].item === currentOrder[i].item) {
+    //const newOrder = currentOrder.filter(() => quantity + 1);
+    //console.log(newOrder)
+
+    //}
+    //}
+    if (!orderNumber) {
+      (async () => {
+        let data = {
+          client_name: values.client_name,
+        };
+        await fetch("/orders/new", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setOrderNumber(data.insertId);
+          });
+      })();
+    }
+
+    let resultado = 0;
+    //setAllSubtotal(subtotal + allSubtotal);
+    for (let i = 0; i < orders.length; i++) {
+      if (orders[i].subtotal !== 0) {
+        resultado = resultado + orders[i].subtotal;
+        setAllSubtotal(resultado);
+      }
+    }
   };
   const validate = Yup.object({
-    client_name: Yup.string().required("Client name required"),
+    client_name: Yup.string()
+      .required("Client name required")
+      .matches(/^[A-Za-z]+$/, "Only enter letters"),
   });
 
   const deleteItem = (index) => {
-    console.log(orders[index], "JAVI", orders.length);
-    for (let i = 0; i < orders.length; i++) {
-      console.log(orders[i]);
-      if (orders[i] === index) {
-        orders.splice(i, 1);
-      }
-    }
+    const newCurrentOrder = [...currentOrder];
+    newCurrentOrder.splice(index, 1);
+    setCurrentOrder(newCurrentOrder);
+    setAllSubtotal(allSubtotal - currentOrder[index].subtotal);
+  };
+
+  const finishOrder = () => {
+    console.log(currentOrder);
+    console.log(allSubtotal);
+    console.log(iva);
+    console.log(total);
+
+    (async () => {
+      let data = {
+        order_num: orderNumber,
+        subtotal: allSubtotal,
+        iva: iva,
+        total: total,
+      };
+      await fetch("http://localhost:4300/orders/edit", {
+        method: "PUT",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((response) => response.json())
+        .then((data) => {});
+    })();
+    history.push("/");
   };
   return (
     <>
@@ -140,6 +234,7 @@ const NewCosmetics = () => {
                     name="quantity"
                     className="input__field mt-3"
                     required
+                    min="0"
                     onChange={(e) => {
                       setQuantity(e.target.value);
                     }}
@@ -153,7 +248,10 @@ const NewCosmetics = () => {
             </Formik>
           </div>
           <div class="col">
-            <h5 className="display-5 mb-5">Order details</h5>
+            <h5 className="display-5 mb-4">Order details</h5>
+            <h6 className="order-number mb-4">
+              Order Number: {orderNumber || "?"}
+            </h6>
             <table class="table table-bordered table-cosmectics m-4">
               <thead className="thead-dark">
                 <tr>
@@ -164,32 +262,52 @@ const NewCosmetics = () => {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((e, index) => {
-                  return (
-                    <tr id={index}>
-                      <th scope="row">
-                        {e.item} y {index}
-                      </th>
-                      <td>{e.quantity}</td>
-                      <td>{e.subtotal}</td>
-                      <td>
-                        <button
-                          class=" btn-danger btn-sm rounded-lg"
-                          type="button"
-                          data-toggle="tooltip"
-                          onClick={() => deleteItem(index)}
-                          data-placement="top"
-                          title="Delete"
-                        >
-                          <i class="fa fa-trash" aria-hidden="true"></i>
-                        </button>
-                      </td>
-                    </tr>
-                  );
+                {currentOrder.map((e, index) => {
+                  if (e.item) {
+                    return (
+                      <tr id={index}>
+                        <th scope="row">{e.item}</th>
+                        <td>{e.quantity}</td>
+                        <td>{e.subtotal}</td>
+                        <td>
+                          <button
+                            class=" btn-danger btn-sm rounded-lg"
+                            type="button"
+                            data-toggle="tooltip"
+                            onClick={() => deleteItem(index)}
+                            data-placement="top"
+                            title="Delete"
+                          >
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  }
                 })}
               </tbody>
             </table>
-            <button type="submit" className=" m-5 submit-button">
+            <table class="table table-bordered table-cosmectics2 m-4 ">
+              <tbody>
+                <tr>
+                  <td>Subtotal: </td>
+                  <td>{allSubtotal}</td>
+                </tr>
+                <tr>
+                  <td>Total IVA:</td>
+                  <td>{iva}</td>
+                </tr>
+                <tr>
+                  <td>Total:</td>
+                  <td>{total}</td>
+                </tr>
+              </tbody>
+            </table>
+            <button
+              type="submit"
+              className="mr-5 submit-button-finish"
+              onClick={finishOrder}
+            >
               Finish
             </button>
           </div>

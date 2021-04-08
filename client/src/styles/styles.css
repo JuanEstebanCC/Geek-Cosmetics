@@ -260,6 +260,18 @@ button.fancy:hover .bottom-key-2 {
   background-color: white;
   color: black;
 }
+.submit-button-finish {
+  margin-right: 5em;
+  background-color: black;
+  padding: 1em 6em;
+  border: solid 3px black;
+  color: white;
+}
+.submit-button-finish:hover {
+  background-color: white;
+  color: black;
+}
+
 select.minimal {
   background-image: linear-gradient(45deg, transparent 50%, gray 50%),
     linear-gradient(135deg, gray 50%, transparent 50%),
@@ -290,4 +302,15 @@ select:-moz-focusring {
 .table-cosmectics {
   width: 42em;
   height: 12em;
+}
+.table-cosmectics2 {
+  margin-left: 10em !important;
+  width: 22em;
+  height: 12em;
+}
+.order-number {
+  font-size: 1.6em;
+}
+.go-back {
+  font-size: 1.1em;
 }
