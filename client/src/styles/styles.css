@@ -287,3 +287,7 @@ select:-moz-focusring {
   color: transparent;
   text-shadow: 0 0 0 #000;
 }
+.table-cosmectics {
+  width: 42em;
+  height: 12em;
+}
