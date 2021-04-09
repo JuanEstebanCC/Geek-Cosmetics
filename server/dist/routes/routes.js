@@ -39,7 +39,6 @@ router.get('/orders', (req, res, next) => {
 router.post('/orders/new', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { client_name } = req.body;
-        const validate = yield validation_newOrder.validateAsync(req.body);
         db_1.connection.query('INSERT INTO orders (client_name) VALUES(?)', [client_name], function (err, results) {
             res.status(200).json(results);
         });
@@ -53,7 +52,6 @@ router.post('/orders/new', (req, res, next) => __awaiter(void 0, void 0, void 0,
 router.put('/orders/edit', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { order_num, subtotal, iva, total } = req.body;
-        const validate = yield validation_editOrder.validateAsync(req.body);
         db_1.connection.query('UPDATE orders SET subtotal = ?, iva = ?, total = ? WHERE order_num = ?', [subtotal, iva, total, order_num], function (err, results) {
             res.status(200).json(results);
         });

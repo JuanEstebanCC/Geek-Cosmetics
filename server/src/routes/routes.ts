@@ -39,7 +39,6 @@ router.post('/orders/new', async(req: Request,res: Response, next) => {
   try{
 
     const {client_name} = req.body
-      const validate = await validation_newOrder.validateAsync(req.body);
     connection.query('INSERT INTO orders (client_name) VALUES(?)',[client_name], function (err, results) {
       res.status(200).json(results)
 });
@@ -54,7 +53,6 @@ router.put('/orders/edit', async(req: Request,res: Response, next) => {
 
   try{
     const {order_num,subtotal,iva,total} = req.body
-const validate = await validation_editOrder.validateAsync(req.body);
 
     connection.query('UPDATE orders SET subtotal = ?, iva = ?, total = ? WHERE order_num = ?',[subtotal,iva,total,order_num], function (err, results) {
       res.status(200).json(results)

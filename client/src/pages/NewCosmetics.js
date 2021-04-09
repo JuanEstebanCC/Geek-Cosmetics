@@ -143,7 +143,7 @@ const NewCosmetics = (props) => {
         iva: iva,
         total: total,
       };
-      await fetch("http://localhost:4300/orders/edit", {
+      await fetch("/orders/edit", {
         method: "PUT",
         headers: {
           Accept: "application/json",

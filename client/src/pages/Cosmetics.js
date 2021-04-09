@@ -6,7 +6,7 @@ const Cosmetics = (props) => {
   const [orders, setOrders] = useState([{}]);
   useEffect(() => {
     (async () => {
-      await fetch("http://localhost:4300/orders", {
+      await fetch("/orders", {
         method: "GET",
         headers: {
           Accept: "application/json",
