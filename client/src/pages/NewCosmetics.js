@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router-dom";
 import { Formik, Form, Field } from "formik";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import * as Yup from "yup";
-
-import dataes from "../helpers/info_prueba.json";
 
 const NewCosmetics = (props) => {
   const { history } = props;
@@ -12,7 +12,7 @@ const NewCosmetics = (props) => {
   const [quantity, setQuantity] = useState(0);
   const [subtotal, setSubtotal] = useState(0);
   const [allSubtotal, setAllSubtotal] = useState(0);
-  //const [total, setTotal] = useState(0);
+  const [avaible, setAvaible] = useState(0);
   const iva = allSubtotal * 0.19;
   const total = allSubtotal + iva;
   const [orderNumber, setOrderNumber] = useState(0);
@@ -26,6 +26,9 @@ const NewCosmetics = (props) => {
       date: "",
     },
   ]);
+
+  const objecto = Object.values(products);
+
   const getCurrentDate = () => {
     const dayjs = require("dayjs");
     let today = dayjs();
@@ -34,13 +37,6 @@ const NewCosmetics = (props) => {
     return currentDate;
   };
   let currentDate = getCurrentDate();
-  //useEffect(async () => {
-  //const response = await fetch("http://localhost:4300/items");
-
-  //const user = await response.json;
-
-  //console.log(user);
-  //}, []);
 
   useEffect(() => {
     (async () => {
@@ -58,66 +54,80 @@ const NewCosmetics = (props) => {
     })();
   }, []);
 
-  const objecto = Object.values(products);
-
   useEffect(() => {
     objecto.map((el) => {
       if (el.descripcion === item) {
         const total = quantity * el.precio;
-        return setSubtotal(total);
+        setSubtotal(total);
+        return setAvaible(el.existencia);
       }
     });
   });
 
   const handleSubmit = (values) => {
-    const newOrder = [
-      {
-        client_name: values.client_name,
-        item: item,
-        quantity: quantity,
-        subtotal: subtotal,
-        total: subtotal,
-        date: currentDate,
-      },
-    ];
+    objecto.map((el) => {
+      if (el.descripcion === item) {
+        console.log(el.existencia);
+        console.log(avaible);
+      }
+    });
 
-    setCurrentOrder([...currentOrder, ...newOrder]);
-    const orders = [...currentOrder, ...newOrder];
-    console.log(currentOrder);
-
-    //for (let i = 0; i < orders.length; i++) {
-    //if (orders[i].item === currentOrder[i].item) {
-    //const newOrder = currentOrder.filter(() => quantity + 1);
-    //console.log(newOrder)
-
-    //}
-    //}
-    if (!orderNumber) {
-      (async () => {
-        let data = {
+    if (quantity > avaible) {
+      toast.error("Not enough items avaible!", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    } else {
+      const newOrder = [
+        {
           client_name: values.client_name,
-        };
-        await fetch("/orders/new", {
-          method: "POST",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            setOrderNumber(data.insertId);
-          });
-      })();
-    }
+          item: item,
+          quantity: quantity,
+          subtotal: subtotal,
+          total: subtotal,
+          date: currentDate,
+        },
+      ];
 
-    let resultado = 0;
-    //setAllSubtotal(subtotal + allSubtotal);
-    for (let i = 0; i < orders.length; i++) {
-      if (orders[i].subtotal !== 0) {
-        resultado = resultado + orders[i].subtotal;
-        setAllSubtotal(resultado);
+      if (currentOrder[0].quantity === 0) {
+        setCurrentOrder([...newOrder]);
+      } else {
+        setCurrentOrder([...currentOrder, ...newOrder]);
+      }
+      const orders = [...currentOrder, ...newOrder];
+      console.log(currentOrder);
+
+      if (!orderNumber) {
+        (async () => {
+          let data = {
+            client_name: values.client_name,
+          };
+          await fetch("/orders/new", {
+            method: "POST",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              setOrderNumber(data.insertId);
+            });
+        })();
+      }
+
+      let resultado = 0;
+      for (let i = 0; i < orders.length; i++) {
+        if (orders[i].subtotal !== 0) {
+          resultado = resultado + orders[i].subtotal;
+          setAllSubtotal(resultado);
+        }
       }
     }
   };
@@ -167,6 +177,17 @@ const NewCosmetics = (props) => {
         <div class="row">
           <div class="col-5">
             <h4 className="font-weight-bold display-5 mb-5">Order</h4>
+            <ToastContainer
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop={false}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+            />
             <Formik
               initialValues={{
                 client_name: "",
@@ -176,7 +197,7 @@ const NewCosmetics = (props) => {
                 handleSubmit(values);
               }}
             >
-              <Form>
+              <Form id="form">
                 <div></div>
                 <label htmlFor="client_name" class="input">
                   <Field
