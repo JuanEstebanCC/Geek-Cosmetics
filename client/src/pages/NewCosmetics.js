@@ -38,6 +38,7 @@ const NewCosmetics = (props) => {
   let currentDate = getCurrentDate();
 
   useEffect(() => {
+	  console.clear();
     (async () => {
       await fetch("/items", {
         method: "GET",
@@ -60,6 +61,7 @@ const NewCosmetics = (props) => {
         setSubtotal(total);
         return setAvaible(el.existencia);
       }
+     return total;
     });
   });
 
@@ -256,7 +258,7 @@ const NewCosmetics = (props) => {
               </Form>
             </Formik>
           </div>
-          <div class="col">
+          <div class="col" style={{ witdh: "5em !important" }}>
             <h5 className="display-5 mb-4">Order details</h5>
             <h6 className="order-number mb-4">
               Order Number: {orderNumber || "?"}
@@ -293,6 +295,8 @@ const NewCosmetics = (props) => {
                       </tr>
                     );
                   }
+                                   return "";
+
                 })}
               </tbody>
             </table>
@@ -314,7 +318,7 @@ const NewCosmetics = (props) => {
             </table>
             <button
               type="submit"
-              className="mr-5 submit-button-finish"
+              className="ml-3 submit-button-finish"
               onClick={finishOrder}
             >
               Finish

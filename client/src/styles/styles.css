@@ -44,12 +44,13 @@ html {
   margin-left: 1em;
 }
 
-.container {
+.container{
   flex-direction: column;
   text-align: center;
   background-color: #fff;
+  width: 70em !important;
   margin-top: 3em;
-  padding: 41px 0px;
+  padding: 3em 5px;
   border: solid 4px black;
   border-radius: 0% 0% 0% 0% / 0% 0% 0% 0%;
   box-shadow: 25px 25px black;
@@ -177,6 +178,7 @@ button.fancy:hover .bottom-key-2 {
   width: 0;
 }
 
+
 .icon-git:hover {
   opacity: 0.3;
 }
@@ -300,11 +302,11 @@ select:-moz-focusring {
   text-shadow: 0 0 0 #000;
 }
 .table-cosmectics {
-  width: 42em;
+  width: 35em;
   height: 12em;
 }
 .table-cosmectics2 {
-  margin-left: 10em !important;
+  margin-left: 5.5em !important;
   width: 22em;
   height: 12em;
 }
