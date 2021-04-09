@@ -15,7 +15,7 @@ A system to sell items, generate a little report and storage in database
 
 ### Swagger
 
-https://app.swaggerhub.com/apis/JuanEstebanCC/Geek_Cosmetics/1.0.0
+https://app.swaggerhub.com/apis-docs/JuanEstebanCC/Geek_Cosmetics/1.0.0
 
 ### Technologies
 
