@@ -7,15 +7,6 @@ import * as Yup from "yup";
 
 const NewCosmetics = (props) => {
   const { history } = props;
-  const [products, setProducts] = useState("");
-  const [item, setItem] = useState("");
-  const [quantity, setQuantity] = useState(0);
-  const [subtotal, setSubtotal] = useState(0);
-  const [allSubtotal, setAllSubtotal] = useState(0);
-  const [avaible, setAvaible] = useState(0);
-  const iva = allSubtotal * 0.19;
-  const total = allSubtotal + iva;
-  const [orderNumber, setOrderNumber] = useState(0);
   const [currentOrder, setCurrentOrder] = useState([
     {
       client_name: "",
@@ -26,7 +17,15 @@ const NewCosmetics = (props) => {
       date: "",
     },
   ]);
-
+  const [products, setProducts] = useState("");
+  const [item, setItem] = useState("");
+  const [quantity, setQuantity] = useState(0);
+  const [subtotal, setSubtotal] = useState(0);
+  const [allSubtotal, setAllSubtotal] = useState(0);
+  const [avaible, setAvaible] = useState(0);
+  const iva = allSubtotal * 0.19;
+  const total = allSubtotal + iva;
+  const [orderNumber, setOrderNumber] = useState(0);
   const objecto = Object.values(products);
 
   const getCurrentDate = () => {
@@ -65,13 +64,6 @@ const NewCosmetics = (props) => {
   });
 
   const handleSubmit = (values) => {
-    objecto.map((el) => {
-      if (el.descripcion === item) {
-        console.log(el.existencia);
-        console.log(avaible);
-      }
-    });
-
     if (quantity > avaible) {
       toast.error("Not enough items avaible!", {
         position: "top-center",
@@ -100,7 +92,6 @@ const NewCosmetics = (props) => {
         setCurrentOrder([...currentOrder, ...newOrder]);
       }
       const orders = [...currentOrder, ...newOrder];
-      console.log(currentOrder);
 
       if (!orderNumber) {
         (async () => {
@@ -145,11 +136,6 @@ const NewCosmetics = (props) => {
   };
 
   const finishOrder = () => {
-    console.log(currentOrder);
-    console.log(allSubtotal);
-    console.log(iva);
-    console.log(total);
-
     (async () => {
       let data = {
         order_num: orderNumber,
@@ -236,9 +222,11 @@ const NewCosmetics = (props) => {
                   required
                 >
                   <option value="">Select the product</option>
-                  {objecto.map((e) => {
+                  {objecto.map((e, index) => {
                     return (
-                      <option value={e.descripcion}>{e.descripcion}</option>
+                      <option value={e.descripcion} id={index}>
+                        {e.descripcion}
+                      </option>
                     );
                   })}
                 </Field>

@@ -13,7 +13,7 @@ const express_1 = require("express");
 const db_1 = require("../database/db");
 const router = express_1.Router();
 // Get's
-router.get('/items', (req, res) => {
+router.get('/items', (req, res, next) => {
     try {
         db_1.connection.query('SELECT * FROM  items', (err, rows) => {
             res.status(200).json(rows);
@@ -21,9 +21,10 @@ router.get('/items', (req, res) => {
     }
     catch (e) {
         console.log(e);
+        next(e);
     }
 });
-router.get('/orders', (req, res) => {
+router.get('/orders', (req, res, next) => {
     try {
         db_1.connection.query('SELECT * FROM  orders', (err, rows) => {
             res.status(200).json(rows);
@@ -31,30 +32,35 @@ router.get('/orders', (req, res) => {
     }
     catch (e) {
         console.log(e);
+        next(e);
     }
 });
 //Post's
-router.post('/orders/new', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/orders/new', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { client_name } = req.body;
+        const validate = yield validation_newOrder.validateAsync(req.body);
         db_1.connection.query('INSERT INTO orders (client_name) VALUES(?)', [client_name], function (err, results) {
             res.status(200).json(results);
         });
     }
     catch (e) {
         console.log(e);
+        next(e);
     }
 }));
 //Put's
-router.put('/orders/edit', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put('/orders/edit', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { order_num, subtotal, iva, total } = req.body;
+        const validate = yield validation_editOrder.validateAsync(req.body);
         db_1.connection.query('UPDATE orders SET subtotal = ?, iva = ?, total = ? WHERE order_num = ?', [subtotal, iva, total, order_num], function (err, results) {
             res.status(200).json(results);
         });
     }
     catch (e) {
         console.log(e);
+        next(e);
     }
 }));
 exports.default = router;
