@@ -13,14 +13,8 @@ app.use(express.urlencoded({extended:false}));
 app.set('port',4300)
 
 app.use(routes);
-app.get('/', (req: express.Request,res: express.Response) => {
-  connection.query('SELECT * FROM  orders', (err: QueryError, rows: RowDataPacket[]) => {
-    console.log('The solution is: ', rows);
-  res.send("Hello word"+rows)
-});
 
 
-})
 app.listen(app.get('port'), () => {
   console.log(`Server running on port ${app.get('port')}`)
 });

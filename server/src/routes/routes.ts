@@ -1,11 +1,11 @@
 import {Router} from 'express'
 import {Request, Response, NextFunction} from 'express';
-const router = Router();
 import { QueryError, RowDataPacket} from 'mysql2';
 import {connection} from '../database/db';
 import * as mysql from 'mysql2/promise';
+const router = Router();
 
-
+// Get's
 router.get('/items', (req: Request,res: Response) => {
 
   try{
@@ -28,6 +28,8 @@ router.get('/orders', (req: Request,res: Response) => {
   }
 })
 
+
+//Post's
 router.post('/orders/new', async(req: Request,res: Response) => {
 
   try{
@@ -41,6 +43,7 @@ router.post('/orders/new', async(req: Request,res: Response) => {
   }
 })
 
+//Put's
 router.put('/orders/edit', async(req: Request,res: Response) => {
 
   try{
