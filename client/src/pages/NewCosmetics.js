@@ -38,6 +38,7 @@ const NewCosmetics = (props) => {
   let currentDate = getCurrentDate();
 
   useEffect(() => {
+    console.clear();
     (async () => {
       await fetch("/items", {
         method: "GET",
@@ -60,6 +61,7 @@ const NewCosmetics = (props) => {
         setSubtotal(total);
         return setAvaible(el.existencia);
       }
+      return total;
     });
   });
 
@@ -75,6 +77,22 @@ const NewCosmetics = (props) => {
         progress: undefined,
       });
     } else {
+      (async () => {
+        let data = {
+          descripcion: item,
+          existencia: avaible - quantity,
+        };
+        await fetch("/items/edit", {
+          method: "PUT",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        })
+          .then((response) => response.json())
+          .then((data) => {});
+      })();
       const newOrder = [
         {
           client_name: values.client_name,
@@ -256,7 +274,7 @@ const NewCosmetics = (props) => {
               </Form>
             </Formik>
           </div>
-          <div class="col">
+          <div class="col" style={{ margin: "5em !important" }}>
             <h5 className="display-5 mb-4">Order details</h5>
             <h6 className="order-number mb-4">
               Order Number: {orderNumber || "?"}
@@ -274,7 +292,7 @@ const NewCosmetics = (props) => {
                 {currentOrder.map((e, index) => {
                   if (e.item) {
                     return (
-                      <tr id={index}>
+                      <tr id={index} key={index}>
                         <th scope="row">{e.item}</th>
                         <td>{e.quantity}</td>
                         <td>{e.subtotal}</td>
@@ -293,6 +311,7 @@ const NewCosmetics = (props) => {
                       </tr>
                     );
                   }
+                  return "";
                 })}
               </tbody>
             </table>

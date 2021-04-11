@@ -5,6 +5,7 @@ const Cosmetics = (props) => {
   const { history } = props;
   const [orders, setOrders] = useState([{}]);
   useEffect(() => {
+	  console.clear();
     (async () => {
       await fetch("/orders", {
         method: "GET",
@@ -34,7 +35,6 @@ const Cosmetics = (props) => {
               <th scope="col">Total</th>
             </tr>
           </thead>
-          {console.log(orders)}
           <tbody>
             {orders.map((e, index) => {
               return (
