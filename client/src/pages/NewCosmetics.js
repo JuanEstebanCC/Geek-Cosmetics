@@ -38,7 +38,11 @@ const NewCosmetics = (props) => {
   let currentDate = getCurrentDate();
 
   useEffect(() => {
+<<<<<<< HEAD
     console.clear();
+=======
+	  console.clear();
+>>>>>>> 91676fa024f2b35890d6ed3bd511e5638b3136af
     (async () => {
       await fetch("/items", {
         method: "GET",
@@ -61,7 +65,11 @@ const NewCosmetics = (props) => {
         setSubtotal(total);
         return setAvaible(el.existencia);
       }
+<<<<<<< HEAD
       return total;
+=======
+     return total;
+>>>>>>> 91676fa024f2b35890d6ed3bd511e5638b3136af
     });
   });
 
@@ -311,7 +319,8 @@ const NewCosmetics = (props) => {
                       </tr>
                     );
                   }
-                  return "";
+                                   return "";
+
                 })}
               </tbody>
             </table>
@@ -333,7 +342,7 @@ const NewCosmetics = (props) => {
             </table>
             <button
               type="submit"
-              className="mr-5 submit-button-finish"
+              className="ml-3 submit-button-finish"
               onClick={finishOrder}
             >
               Finish

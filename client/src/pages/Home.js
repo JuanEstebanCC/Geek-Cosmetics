@@ -5,10 +5,12 @@ import Ilustration from "../undraw_empty_cart_co35.svg";
 import Github from "../GitHub-Mark-64px.png";
 
 const Home = () => {
+
   return (
     <>
       <nav class="navbar navbar-dark bg-dark"></nav>
       <div class="container">
+	  {console.clear()}
         <div class="row">
           <div class="col-6">
             <h3 className="title-home">Geek Cosmetics.</h3>

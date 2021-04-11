@@ -7,6 +7,7 @@ const Cosmetics = (props) => {
   useEffect(() => {
 	  console.clear();
     (async () => {
+	    console.clear();
       await fetch("/orders", {
         method: "GET",
         headers: {
@@ -31,7 +32,7 @@ const Cosmetics = (props) => {
               <th scope="col">Order number</th>
               <th scope="col">Client name</th>
               <th scope="col">Subtotal</th>
-              <th scope="col">Iva</th>
+              <th scope="col">IVA</th>
               <th scope="col">Total</th>
             </tr>
           </thead>
