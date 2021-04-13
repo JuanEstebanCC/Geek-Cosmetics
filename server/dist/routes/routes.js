@@ -43,6 +43,10 @@ const querySchemaEdit = Joi.object({
     iva: Joi.number().required(),
     total: Joi.number().required()
 });
+const querySchemaEditItems = Joi.object({
+    descripcion: Joi.string().required(),
+    existencia: Joi.number().required()
+});
 // Get's
 router.get('/items', (req, res, next) => {
     try {
@@ -92,7 +96,7 @@ router.put('/orders/edit', validator.body(querySchemaEdit), (req, res, next) => 
         next(e);
     }
 }));
-router.put('/items/edit', (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+router.put('/items/edit', validator.body(querySchemaEdit), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { descripcion, existencia } = req.body;
         db_1.connection.query('UPDATE items SET existencia = ? WHERE descripcion = ?', [existencia, descripcion], function (err, results) {

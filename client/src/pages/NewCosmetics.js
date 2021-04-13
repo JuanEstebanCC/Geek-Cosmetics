@@ -38,11 +38,7 @@ const NewCosmetics = (props) => {
   let currentDate = getCurrentDate();
 
   useEffect(() => {
-<<<<<<< HEAD
     console.clear();
-=======
-	  console.clear();
->>>>>>> 91676fa024f2b35890d6ed3bd511e5638b3136af
     (async () => {
       await fetch("/items", {
         method: "GET",
@@ -65,15 +61,12 @@ const NewCosmetics = (props) => {
         setSubtotal(total);
         return setAvaible(el.existencia);
       }
-<<<<<<< HEAD
       return total;
-=======
-     return total;
->>>>>>> 91676fa024f2b35890d6ed3bd511e5638b3136af
     });
   });
 
   const handleSubmit = (values) => {
+    let resultado = 0;
     if (quantity > avaible) {
       toast.error("Not enough items avaible!", {
         position: "top-center",
@@ -111,13 +104,13 @@ const NewCosmetics = (props) => {
           date: currentDate,
         },
       ];
+      const orders = [...currentOrder, ...newOrder];
 
       if (currentOrder[0].quantity === 0) {
         setCurrentOrder([...newOrder]);
       } else {
         setCurrentOrder([...currentOrder, ...newOrder]);
       }
-      const orders = [...currentOrder, ...newOrder];
 
       if (!orderNumber) {
         (async () => {
@@ -137,13 +130,14 @@ const NewCosmetics = (props) => {
               setOrderNumber(data.insertId);
             });
         })();
-      }
-
-      let resultado = 0;
-      for (let i = 0; i < orders.length; i++) {
-        if (orders[i].subtotal !== 0) {
-          resultado = resultado + orders[i].subtotal;
-          setAllSubtotal(resultado);
+        for (let i = 0; i < orders.length; i++) {
+          if (orders[i].subtotal !== 0) {
+            resultado = resultado + orders[i].subtotal;
+            if (item === orders[i].item) {
+              console.log("Articulo repetido", orders[i].item, item);
+            }
+            setAllSubtotal(resultado);
+          }
         }
       }
     }
@@ -319,8 +313,7 @@ const NewCosmetics = (props) => {
                       </tr>
                     );
                   }
-                                   return "";
-
+                  return "";
                 })}
               </tbody>
             </table>

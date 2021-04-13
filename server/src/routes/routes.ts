@@ -112,7 +112,7 @@ router.put('/orders/edit', validator.body(querySchemaEdit),async(req: ValidatedR
 })
 
 
-router.put('/items/edit', validator.body(querySchemaEdit),async(req: ValidatedRequest<EditOrderRequest>,res: Response, next) => {
+router.put('/items/edit', validator.body(querySchemaEdit),async(req: ValidatedRequest<EditItemsReques>,res: Response, next) => {
 
   try{
     const {descripcion,existencia} = req.body
