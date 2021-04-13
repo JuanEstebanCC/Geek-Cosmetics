@@ -18,22 +18,15 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const Joi = __importStar(require("joi"));
-const db_1 = require("../database/db");
 const express_joi_validation_1 = require("express-joi-validation");
 const validator = express_joi_validation_1.createValidator();
 const router = express_1.Router();
+// Import routes
+const controllers_1 = require("../controllers/controllers");
+// Create validation schemas
 const querySchema = Joi.object({
     client_name: Joi.string().required()
 });
@@ -47,65 +40,11 @@ const querySchemaEditItems = Joi.object({
     descripcion: Joi.string().required(),
     existencia: Joi.number().required()
 });
-// Get's
-router.get('/items', (req, res, next) => {
-    try {
-        db_1.connection.query('SELECT * FROM  items', (err, rows) => {
-            res.status(200).json(rows);
-        });
-    }
-    catch (e) {
-        console.log(e);
-        next(e);
-    }
-});
-router.get('/orders', (req, res, next) => {
-    try {
-        db_1.connection.query('SELECT * FROM  orders', (err, rows) => {
-            res.status(200).json(rows);
-        });
-    }
-    catch (e) {
-        console.log(e);
-        next(e);
-    }
-});
-//Post's
-router.post('/orders/new', validator.body(querySchema), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { client_name } = req.body;
-        db_1.connection.query('INSERT INTO orders (client_name) VALUES(?)', [client_name], function (err, results) {
-            res.status(200).json(results);
-        });
-    }
-    catch (e) {
-        console.log(e);
-        next(e);
-    }
-}));
-//Put's
-router.put('/orders/edit', validator.body(querySchemaEdit), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { order_num, subtotal, iva, total } = req.body;
-        db_1.connection.query('UPDATE orders SET subtotal = ?, iva = ?, total = ? WHERE order_num = ?', [subtotal, iva, total, order_num], function (err, results) {
-            res.status(200).json(results);
-        });
-    }
-    catch (e) {
-        console.log(e);
-        next(e);
-    }
-}));
-router.put('/items/edit', validator.body(querySchemaEdit), (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const { descripcion, existencia } = req.body;
-        db_1.connection.query('UPDATE items SET existencia = ? WHERE descripcion = ?', [existencia, descripcion], function (err, results) {
-            res.status(200).json(results);
-        });
-    }
-    catch (e) {
-        console.log(e);
-        next(e);
-    }
-}));
+// Set endpoints
+router.get('/items', controllers_1.getItems);
+router.get('/orders', controllers_1.getOrders);
+router.post('/orders/new', validator.body(querySchema), controllers_1.createOrder);
+router.put('/orders/edit', validator.body(querySchemaEdit), controllers_1.editOrders);
+router.put('/items/edit', validator.body(querySchemaEditItems), controllers_1.updateItems);
+// Export router
 exports.default = router;
