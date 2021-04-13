@@ -15,7 +15,7 @@ const express_joi_validation_1 = require("express-joi-validation");
 const getItems = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         db_1.connection.query('SELECT * FROM  items', (err, rows) => {
-            res.status(200).json(rows);
+            return res.json(rows);
         });
     }
     catch (e) {
@@ -42,7 +42,7 @@ const createOrder = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     try {
         const { client_name } = req.body;
         db_1.connection.query('INSERT INTO orders (client_name) VALUES(?)', [client_name], function (err, results) {
-            res.status(200).json(results);
+            res.status(201).json(results);
         });
     }
     catch (e) {
@@ -56,7 +56,7 @@ const editOrders = (req, res, next) => __awaiter(void 0, void 0, void 0, functio
     try {
         const { order_num, subtotal, iva, total } = req.body;
         db_1.connection.query('UPDATE orders SET subtotal = ?, iva = ?, total = ? WHERE order_num = ?', [subtotal, iva, total, order_num], function (err, results) {
-            res.status(200).json(results);
+            res.status(204).json(results);
         });
     }
     catch (e) {
@@ -69,7 +69,7 @@ const updateItems = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     try {
         const { descripcion, existencia } = req.body;
         db_1.connection.query('UPDATE items SET existencia = ? WHERE descripcion = ?', [existencia, descripcion], function (err, results) {
-            res.status(200).json(results);
+            res.status(204).json(results);
         });
     }
     catch (e) {

@@ -35,11 +35,10 @@ interface EditItemsReques extends ValidatedRequestSchema {
     existencia: number
   }
 }
-export const getItems = async(req: Request, res: Response, next: NextFunction ) => {
+export const getItems = async(req: Request, res: Response, next: NextFunction) => {
    try{
-
   connection.query('SELECT * FROM  items', (err: QueryError, rows: RowDataPacket[]) => {
-    res.status(200).json(rows);
+    return res.json(rows);
 });
    }catch(e){
 
@@ -72,7 +71,7 @@ export const createOrder =  async(req: ValidatedRequest<HelloRequestSchema>,res:
   try{
     const {client_name} = req.body
     connection.query('INSERT INTO orders (client_name) VALUES(?)',[client_name], function (err, results) {
-      res.status(200).json(results)
+      res.status(201).json(results)
 });
   }catch(e){
 
@@ -87,7 +86,7 @@ export const editOrders = async(req: ValidatedRequest<EditOrderRequest>,res: Res
   try{
     const {order_num,subtotal,iva,total} = req.body
     connection.query('UPDATE orders SET subtotal = ?, iva = ?, total = ? WHERE order_num = ?',[subtotal,iva,total,order_num], function (err, results) {
-      res.status(200).json(results)
+      res.status(204).json(results)
 });
   }catch(e){
 
@@ -104,7 +103,7 @@ export const updateItems = async(req: ValidatedRequest<EditItemsReques>,res: Res
     const {descripcion,existencia} = req.body
 
     connection.query('UPDATE items SET existencia = ? WHERE descripcion = ?',[existencia,descripcion], function (err, results) {
-      res.status(200).json(results)
+      res.status(204).json(results)
 });
   }catch(e){
 
