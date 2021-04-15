@@ -26,7 +26,6 @@ Made using the following technologies:
 - [Express] - fast node.js network app framework
 - [TypeScript] - an open-source language which builds on JavaScript, one of the world’s most used tools, by adding static type definitions
 - [Formik] - a small group of React components and hooks for building forms in React
-- [NodeMailer] - is a module for Node.js applications to allow easy as cake email sending
 - [Bootstrap] - The most popular CSS framework
 - [Jest] - For unitaring testing on javascript (Not implement yet)
   - > And more...
